@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.inuker.bluetooth.adapter.DeviceDetailAdapter;
 import com.inuker.bluetooth.library.connect.listener.BleConnectStatusListener;
 import com.inuker.bluetooth.library.connect.options.BleConnectOptions;
 import com.inuker.bluetooth.library.connect.response.BleConnectResponse;
@@ -73,7 +74,8 @@ public class DeviceDetailActivity extends Activity {
             }
         });
 
-        ClientManager.getClient().registerConnectStatusListener(mDevice.getAddress(), mConnectStatusListener);
+        ClientManager.getClient().registerConnectStatusListener(
+                mDevice.getAddress(), mConnectStatusListener);
 
         connectDeviceIfNeeded();
     }
@@ -132,8 +134,8 @@ public class DeviceDetailActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        ClientManager.getClient().disconnect(mDevice.getAddress());
-        ClientManager.getClient().unregisterConnectStatusListener(mDevice.getAddress(), mConnectStatusListener);
+//        ClientManager.getClient().disconnect(mDevice.getAddress());
+//        ClientManager.getClient().unregisterConnectStatusListener(mDevice.getAddress(), mConnectStatusListener);
         super.onDestroy();
     }
 }

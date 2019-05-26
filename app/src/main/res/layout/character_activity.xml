@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/title"
@@ -12,60 +13,22 @@
         android:background="#000000"
         android:gravity="center"
         android:textColor="#ffffff"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/read"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tablayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="read"/>
+        app:tabBackground="@android:color/white"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@android:color/holo_green_light"
+        app:tabIndicatorHeight="2dp"
+        app:tabMode="fixed"
+        app:tabTextColor="@android:color/background_dark" />
 
-    <LinearLayout
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager_ble"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_request_mtu"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="request mtu"/>
-
-        <EditText
-            android:id="@+id/et_input_mtu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="MTU范围23~517"
-            android:inputType="number"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/write"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="write"/>
-
-        <EditText
-            android:id="@+id/input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/notify"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="open notify"/>
-
-    <Button
-        android:id="@+id/unnotify"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="close notify"/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

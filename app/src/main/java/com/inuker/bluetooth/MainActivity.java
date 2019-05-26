@@ -1,11 +1,19 @@
 package com.inuker.bluetooth;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.inuker.bluetooth.adapter.DeviceListAdapter;
+import com.inuker.bluetooth.library.connect.listener.BleConnectStatusListener;
 import com.inuker.bluetooth.library.connect.listener.BluetoothStateListener;
+import com.inuker.bluetooth.library.connect.options.BleConnectOptions;
+import com.inuker.bluetooth.library.connect.response.BleConnectResponse;
+import com.inuker.bluetooth.library.model.BleGattCharacter;
+import com.inuker.bluetooth.library.model.BleGattProfile;
+import com.inuker.bluetooth.library.model.BleGattService;
 import com.inuker.bluetooth.library.search.SearchRequest;
 import com.inuker.bluetooth.library.search.SearchResult;
 import com.inuker.bluetooth.library.search.response.SearchResponse;
@@ -15,41 +23,66 @@ import com.inuker.bluetooth.view.PullToRefreshFrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import static com.inuker.bluetooth.library.Constants.REQUEST_SUCCESS;
+import static com.inuker.bluetooth.library.Constants.STATUS_CONNECTED;
 
 public class MainActivity extends Activity {
 
+    private final String TAG = MainActivity.class.getSimpleName();
     private static final String MAC = "B0:D5:9D:6F:E7:A5";
+    private static final String PREFIX_NAME = "HH-M";
+    //    private static final int PREFIX_SERVICE = 0xFFE0;
+//    private static final int PREFIX_CHARACTER = 0xFFE1;
+    private static final String PREFIX_SERVICE = "0000ffe0";
+    private static final String PREFIX_CHARACTER = "0000ffe1";
 
     private PullToRefreshFrameLayout mRefreshLayout;
     private PullRefreshListView mListView;
     private DeviceListAdapter mAdapter;
     private TextView mTvTitle;
+    private TextView mConnectingTV;
 
     private List<SearchResult> mDevices;
+    private UUID mServiceUUID;
+    private UUID mCharacterUUID;
+    private BluetoothDevice connectDevice;
+    private boolean mConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mDevices = new ArrayList<SearchResult>();
+        mDevices = new ArrayList<>();
 
         mTvTitle = (TextView) findViewById(R.id.title);
+
+        mConnectingTV = (TextView) findViewById(R.id.tv_connecting);
 
         mRefreshLayout = (PullToRefreshFrameLayout) findViewById(R.id.pulllayout);
 
         mListView = mRefreshLayout.getPullToRefreshListView();
         mAdapter = new DeviceListAdapter(this);
         mListView.setAdapter(mAdapter);
-
         mListView.setOnRefreshListener(new PullRefreshListView.OnRefreshListener() {
 
             @Override
             public void onRefresh() {
-                // TODO Auto-generated method stub
-                searchDevice();
+                searchDevice();  // 搜索设备
             }
 
+        });
+        mAdapter.setOnClickItemListener(new DeviceListAdapter.OnClickItemListener() {
+            @Override
+            public void onClickItem(SearchResult result) {
+                connectDevice = result.device;
+                ClientManager.getClient().registerConnectStatusListener(
+                        connectDevice.getAddress(), mConnectStatusListener);
+
+                connectDeviceIfNeeded(connectDevice);
+            }
         });
 
         searchDevice();
@@ -60,11 +93,104 @@ public class MainActivity extends Activity {
                 BluetoothLog.v(String.format("onBluetoothStateChanged %b", openOrClosed));
             }
         });
+
+    }
+
+    private final BleConnectStatusListener mConnectStatusListener = new BleConnectStatusListener() {
+        @Override
+        public void onConnectStatusChanged(String mac, int status) {
+            BluetoothLog.v(String.format("MainActivity onConnectStatusChanged %d in %s",
+                    status, Thread.currentThread().getName()));
+
+            mConnected = (status == STATUS_CONNECTED);
+        }
+    };
+
+    private void connectDeviceIfNeeded(BluetoothDevice device) {
+        if (!mConnected) {
+            connectDevice(device);
+        }
+        //断开连接
+
+    }
+
+    private void connectDevice(BluetoothDevice device) {
+        mConnectingTV.setText("正在连接");
+        mConnectingTV.setVisibility(View.VISIBLE);
+        BleConnectOptions options = new BleConnectOptions.Builder()
+                .setConnectRetry(3)
+                .setConnectTimeout(20000)
+                .setServiceDiscoverRetry(3)
+                .setServiceDiscoverTimeout(10000)
+                .build();
+
+        ClientManager.getClient().connect(
+                device.getAddress(),
+                options, new BleConnectResponse() {
+                    @Override
+                    public void onResponse(int code, BleGattProfile profile) {
+                        if (code == REQUEST_SUCCESS) {
+                            matchService(profile);
+                            mConnectingTV.setText("连接成功！");
+                            mConnectingTV.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mConnectingTV.setVisibility(View.GONE);
+                                }
+                            }, 1000);
+                        } else {
+                            mConnectingTV.setText("连接失败！");
+                            mConnectingTV.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mConnectingTV.setVisibility(View.GONE);
+
+                                }
+                            }, 1000);
+                        }
+                    }
+                });
+    }
+
+
+    private void matchService(BleGattProfile profile) {
+        List<BleGattService> services = profile.getServices();
+
+        for (BleGattService service : services) {
+            String serviceUUID = service.getUUID().toString();
+//            int first = Integer.parseInt(serviceUUID.split("-")[0]);
+//            Log.i(TAG, "matchService first=" + first + "  prefix_service=" + PREFIX_SERVICE);
+            if (PREFIX_SERVICE.equals(serviceUUID.split("-")[0])) {
+                matchCharacter(service);
+                break;
+            }
+        }
+    }
+
+    private void matchCharacter(BleGattService service) {
+        List<BleGattCharacter> characters = service.getCharacters();
+        for (BleGattCharacter character : characters) {
+//            int charUUID = Integer.parseInt(character.getUuid().toString());
+            if (PREFIX_CHARACTER.equals(character.getUuid().toString().split("-")[0])) {
+                mCharacterUUID = character.getUuid();
+                mServiceUUID = service.getUUID();
+
+                if (!mConnected) {
+                    return;
+                }
+                CharacterActivity.open(this,
+                        connectDevice.getName(),
+                        connectDevice.getAddress(),
+                        mServiceUUID,
+                        mCharacterUUID);
+                break;
+            }
+        }
     }
 
     private void searchDevice() {
         SearchRequest request = new SearchRequest.Builder()
-                .searchBluetoothLeDevice(5000, 2).build();
+                .searchBluetoothLeDevice(3000, 2).build();
 
         ClientManager.getClient().search(request, mSearchResponse);
     }
@@ -72,7 +198,6 @@ public class MainActivity extends Activity {
     private final SearchResponse mSearchResponse = new SearchResponse() {
         @Override
         public void onSearchStarted() {
-            BluetoothLog.w("MainActivity.onSearchStarted");
             mListView.onRefreshComplete(true);
             mRefreshLayout.showState(AppConstants.LIST);
             mTvTitle.setText(R.string.string_refreshing);
@@ -81,22 +206,12 @@ public class MainActivity extends Activity {
 
         @Override
         public void onDeviceFounded(SearchResult device) {
-//            BluetoothLog.w("MainActivity.onDeviceFounded " + device.device.getAddress());
-            if (!mDevices.contains(device)) {
+            if (null == device) {
+                return;
+            }
+            if (device.getName().startsWith(PREFIX_NAME) && !mDevices.contains(device)) {
                 mDevices.add(device);
-                mAdapter.setDataList(mDevices);
-
-//                Beacon beacon = new Beacon(device.scanRecord);
-//                BluetoothLog.v(String.format("beacon for %s\n%s", device.getAddress(), beacon.toString()));
-
-//                BeaconItem beaconItem = null;
-//                BeaconParser beaconParser = new BeaconParser(beaconItem);
-//                int firstByte = beaconParser.readByte(); // 读取第1个字节
-//                int secondByte = beaconParser.readByte(); // 读取第2个字节
-//                int productId = beaconParser.readShort(); // 读取第3,4个字节
-//                boolean bit1 = beaconParser.getBit(firstByte, 0); // 获取第1字节的第1bit
-//                boolean bit2 = beaconParser.getBit(firstByte, 1); // 获取第1字节的第2bit
-//                beaconParser.setPosition(0); // 将读取起点设置到第1字节处
+                mAdapter.refresh(mDevices);
             }
 
             if (mDevices.size() > 0) {
@@ -106,7 +221,6 @@ public class MainActivity extends Activity {
 
         @Override
         public void onSearchStopped() {
-            BluetoothLog.w("MainActivity.onSearchStopped");
             mListView.onRefreshComplete(true);
             mRefreshLayout.showState(AppConstants.LIST);
 
@@ -115,8 +229,6 @@ public class MainActivity extends Activity {
 
         @Override
         public void onSearchCanceled() {
-            BluetoothLog.w("MainActivity.onSearchCanceled");
-
             mListView.onRefreshComplete(true);
             mRefreshLayout.showState(AppConstants.LIST);
 

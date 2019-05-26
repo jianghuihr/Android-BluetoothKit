@@ -1,4 +1,4 @@
-package com.inuker.bluetooth;
+package com.inuker.bluetooth.adapter;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.inuker.bluetooth.DetailItem;
+import com.inuker.bluetooth.R;
 import com.inuker.bluetooth.library.model.BleGattCharacter;
 import com.inuker.bluetooth.library.model.BleGattProfile;
 import com.inuker.bluetooth.library.model.BleGattService;

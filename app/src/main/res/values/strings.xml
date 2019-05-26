@@ -19,4 +19,14 @@
     <string name="devices">设备列表</string>
 
     <string name="connecting">正在连接</string>
+
+    <string name="x_to_zero">X 0 &#8592;</string>
+    <string name="x_out_zero">X 0 &#8594;</string>
+    <string name="y_to_zero">Y 0 &#8592;</string>
+    <string name="y_out_zero">Y 0 &#8594;</string>
+    <string name="xy_reset">X+Y 复位</string>
+    <string name="direct">直接</string>
+    <string name="relative">相对</string>
+    <string name="open">打开</string>
+    <string name="close">关闭</string>
 </resources>

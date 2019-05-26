@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="70dp">
+
+    <RadioGroup
+        android:id="@+id/rg_choose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:isScrollContainer="true"
+        android:nestedScrollingEnabled="true"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/rb_1"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="通道 1 光源" />
+
+        <RadioButton
+            android:id="@+id/rb_2"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="运行指示灯" />
+
+        <RadioButton
+            android:id="@+id/rb_3"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="故障指示灯" />
+
+        <RadioButton
+            android:id="@+id/rb_4"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="顶盖加热" />
+
+        <RadioButton
+            android:id="@+id/rb_5"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="制冷片加热" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="制冷片制冷" />
+    </RadioGroup>
+</android.support.v4.widget.NestedScrollView>

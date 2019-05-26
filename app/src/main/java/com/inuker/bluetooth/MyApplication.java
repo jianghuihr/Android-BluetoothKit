@@ -3,6 +3,7 @@ package com.inuker.bluetooth;
 import android.app.Application;
 import android.os.Handler;
 
+import com.inuker.bluetooth.command.Bus;
 import com.inuker.bluetooth.library.BluetoothContext;
 
 /**
@@ -21,6 +22,7 @@ public class MyApplication extends Application {
         super.onCreate();
         instance = this;
         BluetoothContext.set(this);
-
+        Bus.cmdProcRoll();
+        Bus.cmdReceiveRoll();
     }
 }
