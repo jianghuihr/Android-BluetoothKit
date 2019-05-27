@@ -69,9 +69,6 @@ public class TempPresenter extends BasePresenter implements View.OnClickListener
         Button stopBTN = (Button) view.findViewById(R.id.btn_stop);
         stopBTN.setOnClickListener(this);
 
-        Button tiredBTN = (Button) view.findViewById(R.id.btn_tired);
-        tiredBTN.setOnClickListener(this);
-
         Button executeBTN = (Button) view.findViewById(R.id.btn_execute);
         executeBTN.setOnClickListener(this);
 
@@ -102,11 +99,6 @@ public class TempPresenter extends BasePresenter implements View.OnClickListener
                 //停止点击事件
                 Bus.op = 0;
                 Bus.cmd = 0xA1;
-                break;
-            case R.id.btn_tired:
-                //传动老化点击事件
-                Bus.op = 0x08;
-                Bus.cmd = 0xE7;
                 break;
             case R.id.btn_execute:
                 //执行点击事件

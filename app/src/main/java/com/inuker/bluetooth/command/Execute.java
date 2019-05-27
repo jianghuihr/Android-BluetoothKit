@@ -141,6 +141,32 @@ public class Execute {
 
         return code;
     }
+    int qGetParam(int op, Integer param) {
+        int code = 0;
+        byte[] dataOut = new byte[4];
+        dataOut[0] = (byte)0xE3;
+        dataOut[1] = 2;
+        dataOut[2] = (byte)op;
+        dataOut[3] = (byte)sumMake(dataOut, dataOut.length);
+        write(dataOut);
+        int ret = Semaphore.pend(500);
+        if (ret == 0) {
+            Log.i(TAG, "ok");
+        } else {
+            Log.i(TAG, "timeout");
+        }
+        code = CmdReturn.GetCode();
+
+        param = new Integer(Byte2UINT(CmdReturn.rx[3]) + Byte2UINT(CmdReturn.rx[4]) * 256);
+        Log.i(TAG, "param=" + param);
+
+        CmdReturn.lenRx = 0;
+
+        Log.i(TAG, "getP code= "+ code);
+
+
+        return code;
+    }
     // 运动
     int qSetParam(int op, int param) {
         int code = 0;

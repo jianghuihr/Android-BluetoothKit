@@ -107,6 +107,9 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
         Button yOutZeroBTN = (Button) view.findViewById(R.id.btn_y_out_zero);
         yOutZeroBTN.setOnClickListener(this);
 
+        Button tiredBTN = (Button) view.findViewById(R.id.btn_tired);
+        tiredBTN.setOnClickListener(this);
+
         RadioGroup chooseRG = (RadioGroup) view.findViewById(R.id.rg_choose);
         chooseRG.check(R.id.rb_1);
         chooseRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -184,6 +187,11 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
                 else
                     Bus.op = 5;
                 Bus.cmd = 0xE2;
+                break;
+            case R.id.btn_tired:
+                //传动老化点击事件
+                Bus.op = 0x08;
+                Bus.cmd = 0xE7;
                 break;
         }
     }

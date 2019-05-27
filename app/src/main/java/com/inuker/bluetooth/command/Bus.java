@@ -113,6 +113,19 @@ public class Bus {
                 break;
             case 0xE2:   // 运动
                 code = execute.qMove(op, val1);
+                break;
+            case 0xE3:   // 获取参数
+                Integer param1 = new Integer(0), param2 = 0;
+                code = execute.qGetParam(op, param1);
+                Log.i(TAG, " pa= "+ param1);
+
+                if (code == 0) {
+                    if (op == 6) {
+                        code = execute.qGetParam(7, param2);
+                    }
+                }
+                Log.i(TAG, " pa= "+ param2);
+                break;
             case 0xE7:   // 设置参数
                 code = execute.qSetParam(op, val1);
                 break;

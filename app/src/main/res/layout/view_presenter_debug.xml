@@ -68,63 +68,92 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
-
-                <Button
-                    android:id="@+id/btn_x_to_zero"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/style_button_bg"
-                    android:gravity="center"
-                    android:text="@string/x_to_zero"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    tools:ignore="ButtonStyle" />
-
-                <Button
-                    android:id="@+id/btn_x_out_zero"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:background="@drawable/style_button_bg"
-                    android:gravity="center"
-                    android:text="@string/x_out_zero"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    tools:ignore="ButtonStyle" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btn_y_to_zero"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/style_button_bg"
-                    android:gravity="center"
-                    android:text="@string/y_to_zero"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <Button
+                            android:id="@+id/btn_x_to_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/style_button_bg"
+                            android:gravity="center"
+                            android:text="@string/x_to_zero"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            tools:ignore="ButtonStyle" />
+
+                        <Button
+                            android:id="@+id/btn_x_out_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:background="@drawable/style_button_bg"
+                            android:gravity="center"
+                            android:text="@string/x_out_zero"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            tools:ignore="ButtonStyle" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btn_y_to_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/style_button_bg"
+                            android:gravity="center"
+                            android:text="@string/y_to_zero"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp" />
+
+                        <Button
+                            android:id="@+id/btn_y_out_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:background="@drawable/style_button_bg"
+                            android:gravity="center"
+                            android:text="@string/y_out_zero"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            tools:ignore="ButtonStyle" />
+                    </LinearLayout>
+                </LinearLayout>
 
                 <Button
-                    android:id="@+id/btn_y_out_zero"
+                    android:id="@+id/btn_tired"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
                     android:background="@drawable/style_button_bg"
                     android:gravity="center"
-                    android:text="@string/y_out_zero"
+                    android:text="传动老化"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     tools:ignore="ButtonStyle" />
-            </LinearLayout>
+            </RelativeLayout>
 
         </LinearLayout>
 
