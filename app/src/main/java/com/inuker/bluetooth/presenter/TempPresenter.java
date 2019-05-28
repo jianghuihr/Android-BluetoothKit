@@ -11,14 +11,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.inuker.bluetooth.command.Bus;
 import com.inuker.bluetooth.R;
-import com.inuker.bluetooth.command.CmdReturn;
+import com.inuker.bluetooth.command.Bus;
 import com.inuker.bluetooth.concurrency.MyHandler;
 import com.inuker.bluetooth.model.Temp;
 
 public class TempPresenter extends BasePresenter implements View.OnClickListener {
 
+    private final String TAG = TempPresenter.class.getSimpleName();
     private Activity activity;
     private final String TITLE = "温度";
 
@@ -38,7 +38,7 @@ public class TempPresenter extends BasePresenter implements View.OnClickListener
         View view = LayoutInflater.from(activity).inflate(R.layout.view_presenter_temp, null);
         initView(view);
 
-        handler.setCallback(new Handler.Callback() {
+        handler.setReceiveCallback(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {

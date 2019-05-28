@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.inuker.bluetooth.adapter.BleToolPagerAdapter;
 import com.inuker.bluetooth.command.Bus;
 import com.inuker.bluetooth.command.Execute;
+import com.inuker.bluetooth.library.connect.response.BleNotifyResponse;
+import com.inuker.bluetooth.library.connect.response.BleWriteResponse;
 import com.inuker.bluetooth.presenter.DebugPresenter;
 import com.inuker.bluetooth.presenter.OtherPresenter;
 import com.inuker.bluetooth.presenter.TempPresenter;
@@ -18,6 +20,8 @@ import com.inuker.bluetooth.view.PageView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static com.inuker.bluetooth.library.Constants.REQUEST_SUCCESS;
 
 /**
  * Created by dingjikerbo on 2016/9/6.
@@ -65,6 +69,8 @@ public class CharacterActivity extends Activity {
         mCharacter = (UUID) intent.getSerializableExtra("character");
 
         Bus.initConfig(new Execute(mMac, mService, mCharacter));
+        //自动开启蓝牙接收
+        ClientManager.getClient().notify(mMac, mService, mCharacter, mNotifyRsp);
 
         mTvTitle = (TextView) findViewById(R.id.title);
         mTvTitle.setText(String.format("%s", mName));
@@ -91,17 +97,46 @@ public class CharacterActivity extends Activity {
         mBlePager.setAdapter(bleToolPagerAdapter);
 
         tempPresenter = new TempPresenter(this);
-        debugPresenter = new DebugPresenter(this, mMac, mService, mCharacter);
+        debugPresenter = new DebugPresenter(this);
         otherPresenter = new OtherPresenter(this);
         bleToolPageList.add(new PageView(tempPresenter.getView(), tempPresenter.getTitle()));
         bleToolPageList.add(new PageView(debugPresenter.getView(), debugPresenter.getTitle()));
         bleToolPageList.add(new PageView(otherPresenter.getView(), otherPresenter.getTitle()));
         bleToolPagerAdapter.refresh(bleToolPageList);
-        mBlePager.setCurrentItem(1);
+        mBlePager.setCurrentItem(0);
 
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(mBlePager);
     }
+
+    private final BleWriteResponse mWriteRsp = new BleWriteResponse() {
+        @Override
+        public void onResponse(int code) {
+            if (code == REQUEST_SUCCESS) {
+                CommonUtils.toast("success");
+            } else {
+                CommonUtils.toast("failed");
+            }
+        }
+    };
+
+    private final BleNotifyResponse mNotifyRsp = new BleNotifyResponse() {
+        @Override
+        public void onNotify(UUID service, UUID character, byte[] value) {
+            if (service.equals(mService) && character.equals(mCharacter)) {
+                Bus.receive(value);
+            }
+        }
+
+        @Override
+        public void onResponse(int code) {
+            if (code == REQUEST_SUCCESS) {
+                CommonUtils.toast("success");
+            } else {
+                CommonUtils.toast("failed");
+            }
+        }
+    };
 
 //    private final BleReadResponse mReadRsp = new BleReadResponse() {
 //        @Override

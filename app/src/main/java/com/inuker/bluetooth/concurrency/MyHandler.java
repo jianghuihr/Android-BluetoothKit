@@ -7,17 +7,29 @@ import android.os.Message;
 public class MyHandler {
 
     public static final int MSG_WHAT_TEMP = 1;
-    public static final int MSG_WHAT_OTHER = 2;
+    public static final int MSG_WHAT_OTHER_E3 = 2;
+    public static final int MSG_WHAT_OTHER_E5 = 3;
 
-    private Handler handler = new Handler() {
+    private Handler sendHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (null != callback) {
-                callback.handleMessage(msg);
+            if (null != sendCallback) {
+                sendCallback.handleMessage(msg);
             }
         }
     };
-    private Handler.Callback callback = null;
+
+    private Handler receiveHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (null != receiveCallback) {
+                receiveCallback.handleMessage(msg);
+            }
+        }
+    };
+
+    private Handler.Callback sendCallback = null;
+    private Handler.Callback receiveCallback = null;
 
     private static MyHandler myHandler = null;
 
@@ -35,11 +47,19 @@ public class MyHandler {
         return myHandler;
     }
 
-    public Handler handler() {
-        return handler;
+    public Handler sendHandler() {
+        return sendHandler;
     }
 
-    public void setCallback(Handler.Callback callback) {
-        this.callback = callback;
+    public Handler receiveHandler() {
+        return receiveHandler;
+    }
+
+    public void setSendCallback(Handler.Callback callback) {
+        this.sendCallback = callback;
+    }
+
+    public void setReceiveCallback(Handler.Callback callback) {
+        this.receiveCallback = callback;
     }
 }

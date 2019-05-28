@@ -133,9 +133,20 @@ public class Bus {
                     }
                 }
                 Message message = new Message();
-                message.what = MyHandler.MSG_WHAT_OTHER;
+                message.what = MyHandler.MSG_WHAT_OTHER_E3;
                 message.obj = new Param(param1.val1, param2.val1);
-                myHandler.handler().sendMessage(message);
+                myHandler.sendHandler().sendMessage(message);
+                break;
+            case 0xE5:   // 获取传感器状态
+                Param param = new Param();
+                param.val1 = 0;
+                code = execute.qCheckSensor(val1, param);
+                Log.i(TAG, " pa1= " + param.val1);    // 0： 不触发；1-触发
+
+                Message msgE5 = new Message();
+                msgE5.what = MyHandler.MSG_WHAT_OTHER_E5;
+                msgE5.obj = param;
+                myHandler.sendHandler().sendMessage(msgE5);
                 break;
             case 0xE7:   // 设置参数
                 code = execute.qSetParam(op, val1);

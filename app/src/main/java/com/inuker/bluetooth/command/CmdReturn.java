@@ -63,19 +63,17 @@ public class CmdReturn {
 
     public static void cmdReturnProc(byte[] dataIn, int lenIn) {
         byte cmdRet = dataIn[0];
-//        Log.i(TAG, "cmdRet=" + cmdRet);
+        Log.i(TAG, "cmdRet=" + cmdRet);
 
         if (cmdRet == (byte) 0xB0) {
-            //Log.i(TAG, "ret=0xB0, lenRx=" + lenIn);
             top = (float) (Byte2UINT(dataIn[2]) + Byte2UINT(dataIn[3]) * 256) / 100.0f;
             mod = (float) (Byte2UINT(dataIn[4]) + Byte2UINT(dataIn[5]) * 256) / 100.0f;
             env = (float) (Byte2UINT(dataIn[6]) + Byte2UINT(dataIn[7]) * 256) / 100.0f;
+//            Log.i(TAG, "ret=0xB0, top=" + top + "  mod=" + mod + "  env=" + env);
             Message message = new Message();
             message.what = MyHandler.MSG_WHAT_TEMP;
             message.obj = new Temp(mod, top, env);
-            myHandler.handler().sendMessage(message);
-
-            Log.i(TAG, "t=" + top + mod + env);
+            myHandler.receiveHandler().sendMessage(message);
         } else if (cmdRet == (byte) (Bus.cmd | 0x10)) {
             boolean ret = sumCheck(dataIn, lenIn);
             Log.i(TAG, "ret=" + ret);

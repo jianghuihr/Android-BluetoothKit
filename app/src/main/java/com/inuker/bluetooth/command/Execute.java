@@ -196,6 +196,32 @@ public class Execute {
         return code;
     }
 
+    // 读取传感器信息
+    int qCheckSensor(int devId, Param param) {
+        int code = 0;
+        byte[] dataOut = new byte[4];
+        dataOut[0] = (byte)0xE5;
+        dataOut[1] = 2;
+        dataOut[2] = (byte)devId;
+        dataOut[3] = (byte)sumMake(dataOut, dataOut.length);
+        write(dataOut);
+        int ret = Semaphore.pend(500);
+        if (ret == 0) {
+            Log.i(TAG, "ok");
+        } else {
+            Log.i(TAG, "timeout");
+        }
+        code = CmdReturn.GetCode();
+        param.val1 = Byte2UINT(CmdReturn.rx[3]);
+        Log.i(TAG, "param1=" + param.val1);
+
+        CmdReturn.lenRx = 0;
+
+        Log.i(TAG, "getSensor code= " + code);
+
+        return code;
+    }
+
     // 部件切换
     void qSwitch(int devId, int action) {
         //byte[] dataOut = new byte[]{0xE1, 0x02, 0x00, 0xE3};

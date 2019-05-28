@@ -3,8 +3,6 @@ package com.inuker.bluetooth.presenter;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,57 +14,65 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.inuker.bluetooth.ClientManager;
-import com.inuker.bluetooth.CommonUtils;
 import com.inuker.bluetooth.R;
-import com.inuker.bluetooth.adapter.WidgetsAdapter;
 import com.inuker.bluetooth.command.Bus;
-import com.inuker.bluetooth.command.CmdReturn;
-import com.inuker.bluetooth.command.Execute;
 import com.inuker.bluetooth.concurrency.MyHandler;
-import com.inuker.bluetooth.library.connect.response.BleNotifyResponse;
-import com.inuker.bluetooth.library.connect.response.BleWriteResponse;
-import com.inuker.bluetooth.library.utils.BluetoothLog;
-import com.inuker.bluetooth.model.Temp;
-
-import java.util.UUID;
-import java.util.logging.Logger;
-
-import static com.inuker.bluetooth.library.Constants.REQUEST_SUCCESS;
+import com.inuker.bluetooth.model.Param;
 
 public class DebugPresenter extends BasePresenter implements View.OnClickListener {
 
+    private final String TAG = DebugPresenter.class.getSimpleName();
     private Activity activity;
     private final String TITLE = "调试";
 
-    private String mMac;
-    private String mName;
-    private UUID mService;
-    private UUID mCharacter;
-
     private EditText distanceET;
+    private RadioButton xZeroRB;
+    private RadioButton yZeroRB;
+    private TextView resultTV;
+    private EditText dataAET;
+    private EditText dataBET;
 
+    private MyHandler handler = MyHandler.get();
 
-    public DebugPresenter(Activity activity,
-                          String mac,
-                          UUID serviceUUID,
-                          UUID characterUUID) {
+    public DebugPresenter(Activity activity) {
         this.activity = activity;
-        this.mMac = mac;
-        this.mService = serviceUUID;
-        this.mCharacter = characterUUID;
     }
 
     @Override
     public View getView() {
         View view = LayoutInflater.from(activity).inflate(R.layout.view_presenter_debug, null);
         initView(view);
-        //自动开启蓝牙接收
-        ClientManager.getClient().notify(mMac, mService, mCharacter, mNotifyRsp);
+
+        handler.setSendCallback(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    case MyHandler.MSG_WHAT_OTHER_E3:
+                        Param param = (Param) msg.obj;
+                        if (null != param) {
+                            dataAET.setText(String.valueOf(param.val2));
+                            dataBET.setText(String.valueOf(param.val1));
+                        }
+                        break;
+                    case MyHandler.MSG_WHAT_OTHER_E5:
+                        Param paramE5 = (Param) msg.obj;
+                        if (null != paramE5) {
+                            dataAET.setText("#" + String.valueOf(paramE5.val1));
+                            dataBET.setText("#");
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
         return view;
     }
 
     private void initView(View view) {
+        dataAET = (EditText) view.findViewById(R.id.et_data_a);
+
+        dataBET = (EditText) view.findViewById(R.id.et_data_b);
+
         distanceET = (EditText) view.findViewById(R.id.et_distance);
 
         TextView resetXYTV = (TextView) view.findViewById(R.id.tv_reset_xy);
@@ -131,6 +137,15 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
             }
         });
 
+//        xZeroRB = (RadioButton) view.findViewById(R.id.rb_x_zero);
+//        xZeroRB.setChecked(true);
+//
+//        yZeroRB = (RadioButton) view.findViewById(R.id.rb_y_zero);
+//
+//        resultTV = (TextView) view.findViewById(R.id.tv_result);
+
+        Button readBTN = (Button) view.findViewById(R.id.btn_read);
+        readBTN.setOnClickListener(this);
     }
 
     @Override
@@ -193,35 +208,14 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
                 Bus.op = 0x08;
                 Bus.cmd = 0xE7;
                 break;
+            case R.id.btn_read:
+//                if (xZeroRB.isChecked()) {
+                    Bus.val1 = 0x40;
+//                } else if (yZeroRB.isChecked()) {
+//                    Bus.val1 = 0x42;
+//                }
+                Bus.cmd = 0xE5;
+                break;
         }
     }
-
-    private final BleWriteResponse mWriteRsp = new BleWriteResponse() {
-        @Override
-        public void onResponse(int code) {
-            if (code == REQUEST_SUCCESS) {
-                CommonUtils.toast("success");
-            } else {
-                CommonUtils.toast("failed");
-            }
-        }
-    };
-
-    private final BleNotifyResponse mNotifyRsp = new BleNotifyResponse() {
-        @Override
-        public void onNotify(UUID service, UUID character, byte[] value) {
-            if (service.equals(mService) && character.equals(mCharacter)) {
-                Bus.receive(value);
-            }
-        }
-
-        @Override
-        public void onResponse(int code) {
-            if (code == REQUEST_SUCCESS) {
-                CommonUtils.toast("success");
-            } else {
-                CommonUtils.toast("failed");
-            }
-        }
-    };
 }

@@ -3,6 +3,7 @@ package com.inuker.bluetooth.presenter;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -22,22 +23,22 @@ public class OtherPresenter extends BasePresenter implements View.OnClickListene
     private EditText dataAET;
     private EditText dataBET;
 
-    private MyHandler handler = MyHandler.get();
-
     public OtherPresenter(Activity activity) {
         this.activity = activity;
     }
+
+    private MyHandler handler = MyHandler.get();
 
     @Override
     public View getView() {
         View view = LayoutInflater.from(activity).inflate(R.layout.view_presenter_other, null);
         initView(view);
 
-        handler.setCallback(new Handler.Callback() {
+        handler.setSendCallback(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
-                    case MyHandler.MSG_WHAT_OTHER:
+                    case MyHandler.MSG_WHAT_OTHER_E3:
                         Param param = (Param) msg.obj;
                         if (null != param) {
                             dataAET.setText(String.valueOf(param.val2));
