@@ -5,6 +5,10 @@ import android.os.Handler;
 import android.os.Message;
 
 public class MyHandler {
+
+    public static final int MSG_WHAT_TEMP = 1;
+    public static final int MSG_WHAT_OTHER = 2;
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -16,6 +20,9 @@ public class MyHandler {
     private Handler.Callback callback = null;
 
     private static MyHandler myHandler = null;
+
+    private MyHandler() {
+    }
 
     public static MyHandler get() {
         if (null == myHandler) {

@@ -8,6 +8,8 @@ import android.util.Log;
 import com.inuker.bluetooth.concurrency.MyHandler;
 import com.inuker.bluetooth.concurrency.ScheduleThreadPoolManager;
 import com.inuker.bluetooth.library.utils.ByteUtils;
+import com.inuker.bluetooth.model.Param;
+import com.inuker.bluetooth.model.Temp;
 
 import java.util.Arrays;
 import java.util.concurrent.ScheduledFuture;
@@ -115,16 +117,22 @@ public class Bus {
                 code = execute.qMove(op, val1);
                 break;
             case 0xE3:   // 获取参数
-                Integer param1 = new Integer(0), param2 = 0;
-                code = execute.qGetParam(op, param1);
-                Log.i(TAG, " pa= "+ param1);
+                Param param = new Param();
+                param.val1 = 0;
+                param.val2 = 0;
+                code = execute.qGetParam(op, param);
+                Log.i(TAG, " pa= " + param);
 
                 if (code == 0) {
                     if (op == 6) {
-                        code = execute.qGetParam(7, param2);
+//                        code = execute.qGetParam(7, param);
                     }
                 }
-                Log.i(TAG, " pa= "+ param2);
+                Log.i(TAG, " pa1= " + param.val1 + ",pa2=" + param.val2);
+                Message message = new Message();
+                message.what = MyHandler.MSG_WHAT_OTHER;
+                message.obj = param;
+                MyHandler.get().handler().sendMessage(message);
                 break;
             case 0xE7:   // 设置参数
                 code = execute.qSetParam(op, val1);

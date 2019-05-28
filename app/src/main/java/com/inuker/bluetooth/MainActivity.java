@@ -3,10 +3,13 @@ package com.inuker.bluetooth;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.inuker.bluetooth.adapter.DeviceListAdapter;
+import com.inuker.bluetooth.command.Bus;
+import com.inuker.bluetooth.command.Execute;
 import com.inuker.bluetooth.library.connect.listener.BleConnectStatusListener;
 import com.inuker.bluetooth.library.connect.listener.BluetoothStateListener;
 import com.inuker.bluetooth.library.connect.options.BleConnectOptions;
@@ -18,6 +21,7 @@ import com.inuker.bluetooth.library.search.SearchRequest;
 import com.inuker.bluetooth.library.search.SearchResult;
 import com.inuker.bluetooth.library.search.response.SearchResponse;
 import com.inuker.bluetooth.library.utils.BluetoothLog;
+import com.inuker.bluetooth.model.Param;
 import com.inuker.bluetooth.view.PullRefreshListView;
 import com.inuker.bluetooth.view.PullToRefreshFrameLayout;
 
@@ -33,8 +37,6 @@ public class MainActivity extends Activity {
     private final String TAG = MainActivity.class.getSimpleName();
     private static final String MAC = "B0:D5:9D:6F:E7:A5";
     private static final String PREFIX_NAME = "HH-M";
-    //    private static final int PREFIX_SERVICE = 0xFFE0;
-//    private static final int PREFIX_CHARACTER = 0xFFE1;
     private static final String PREFIX_SERVICE = "0000ffe0";
     private static final String PREFIX_CHARACTER = "0000ffe1";
 
@@ -93,7 +95,6 @@ public class MainActivity extends Activity {
                 BluetoothLog.v(String.format("onBluetoothStateChanged %b", openOrClosed));
             }
         });
-
     }
 
     private final BleConnectStatusListener mConnectStatusListener = new BleConnectStatusListener() {
@@ -158,8 +159,6 @@ public class MainActivity extends Activity {
 
         for (BleGattService service : services) {
             String serviceUUID = service.getUUID().toString();
-//            int first = Integer.parseInt(serviceUUID.split("-")[0]);
-//            Log.i(TAG, "matchService first=" + first + "  prefix_service=" + PREFIX_SERVICE);
             if (PREFIX_SERVICE.equals(serviceUUID.split("-")[0])) {
                 matchCharacter(service);
                 break;
@@ -170,7 +169,6 @@ public class MainActivity extends Activity {
     private void matchCharacter(BleGattService service) {
         List<BleGattCharacter> characters = service.getCharacters();
         for (BleGattCharacter character : characters) {
-//            int charUUID = Integer.parseInt(character.getUuid().toString());
             if (PREFIX_CHARACTER.equals(character.getUuid().toString().split("-")[0])) {
                 mCharacterUUID = character.getUuid();
                 mServiceUUID = service.getUUID();

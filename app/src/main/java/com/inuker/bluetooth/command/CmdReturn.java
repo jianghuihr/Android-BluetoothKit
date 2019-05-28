@@ -12,7 +12,6 @@ import java.util.Arrays;
 public class CmdReturn {
 
     static final String TAG = CmdReturn.class.getSimpleName();
-    public static final int MSG_WHAT_TEMP = 1;
 
     public static float mod;
     public static float top;
@@ -72,7 +71,7 @@ public class CmdReturn {
             mod = (float) (Byte2UINT(dataIn[4]) + Byte2UINT(dataIn[5]) * 256) / 100.0f;
             env = (float) (Byte2UINT(dataIn[6]) + Byte2UINT(dataIn[7]) * 256) / 100.0f;
             Message message = new Message();
-            message.what = MSG_WHAT_TEMP;
+            message.what = MyHandler.MSG_WHAT_TEMP;
             message.obj = new Temp(mod, top, env);
             myHandler.handler().sendMessage(message);
 

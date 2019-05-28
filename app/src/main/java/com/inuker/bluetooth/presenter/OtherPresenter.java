@@ -1,6 +1,8 @@
 package com.inuker.bluetooth.presenter;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -9,12 +11,20 @@ import android.widget.Toast;
 
 import com.inuker.bluetooth.R;
 import com.inuker.bluetooth.command.Bus;
+import com.inuker.bluetooth.command.CmdReturn;
+import com.inuker.bluetooth.concurrency.MyHandler;
+import com.inuker.bluetooth.model.Param;
+import com.inuker.bluetooth.model.Temp;
 
 public class OtherPresenter extends BasePresenter implements View.OnClickListener {
 
     private Activity activity;
     private final String TITLE = "其他";
 
+    private EditText data1ET;
+    private EditText data2ET;
+
+    private MyHandler handler = MyHandler.get();
 
     public OtherPresenter(Activity activity) {
         this.activity = activity;
@@ -24,6 +34,22 @@ public class OtherPresenter extends BasePresenter implements View.OnClickListene
     public View getView() {
         View view = LayoutInflater.from(activity).inflate(R.layout.view_presenter_other, null);
         initView(view);
+
+        handler.setCallback(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    case MyHandler.MSG_WHAT_OTHER:
+                        Param param = (Param) msg.obj;
+                        if (null != param) {
+                            data1ET.setText(String.valueOf(param.val1));
+                            data2ET.setText(String.valueOf(param.val2));
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
         return view;
     }
 
@@ -42,9 +68,9 @@ public class OtherPresenter extends BasePresenter implements View.OnClickListene
         Button wrapBTN = (Button) view.findViewById(R.id.btn_wrap);
         wrapBTN.setOnClickListener(this);
 
-        EditText data1ET = (EditText) view.findViewById(R.id.et_data1);
+        data1ET = (EditText) view.findViewById(R.id.et_data1);
 
-        EditText data2ET = (EditText) view.findViewById(R.id.et_data2);
+        data2ET = (EditText) view.findViewById(R.id.et_data2);
 
     }
 

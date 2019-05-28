@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 apply plugin: 'com.android.application'
 
 android {
@@ -56,7 +58,7 @@ android {
                 }
                 variant.getPackageApplication().outputScope.apkDatas.forEach { apkData ->
                     //这个修改输出APK的文件名
-                    apkData.outputFileName = "BluetoothKit_v" + project.VERSION_NAME + "_" + project.VERSION_CODE + ".apk"
+                    apkData.outputFileName = "BluetoothKit_v" + getBuildTime() + ".apk"
                 }
             }
         }
@@ -66,6 +68,10 @@ android {
         abortOnError false
     }
 
+}
+
+def getBuildTime() {
+    return new SimpleDateFormat("yyyyMMddhhmm").format(Calendar.getInstance().getTime())
 }
 
 dependencies {

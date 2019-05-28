@@ -42,7 +42,7 @@ public class TempPresenter extends BasePresenter implements View.OnClickListener
             @Override
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
-                    case CmdReturn.MSG_WHAT_TEMP:
+                    case MyHandler.MSG_WHAT_TEMP:
                         Temp temp = (Temp) msg.obj;
                         if (null != temp) {
                             topTV.setText(String.valueOf(temp.getTop()));
