@@ -124,7 +124,7 @@
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/et_data1"
+                    android:id="@+id/et_data_a"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:background="@drawable/shape_temp_text_bg"
@@ -149,7 +149,7 @@
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/et_data2"
+                    android:id="@+id/et_data_b"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
 

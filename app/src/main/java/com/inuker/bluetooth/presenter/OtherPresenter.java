@@ -11,18 +11,16 @@ import android.widget.Toast;
 
 import com.inuker.bluetooth.R;
 import com.inuker.bluetooth.command.Bus;
-import com.inuker.bluetooth.command.CmdReturn;
 import com.inuker.bluetooth.concurrency.MyHandler;
 import com.inuker.bluetooth.model.Param;
-import com.inuker.bluetooth.model.Temp;
 
 public class OtherPresenter extends BasePresenter implements View.OnClickListener {
 
     private Activity activity;
     private final String TITLE = "其他";
 
-    private EditText data1ET;
-    private EditText data2ET;
+    private EditText dataAET;
+    private EditText dataBET;
 
     private MyHandler handler = MyHandler.get();
 
@@ -42,8 +40,8 @@ public class OtherPresenter extends BasePresenter implements View.OnClickListene
                     case MyHandler.MSG_WHAT_OTHER:
                         Param param = (Param) msg.obj;
                         if (null != param) {
-                            data1ET.setText(String.valueOf(param.val1));
-                            data2ET.setText(String.valueOf(param.val2));
+                            dataAET.setText(String.valueOf(param.val2));
+                            dataBET.setText(String.valueOf(param.val1));
                         }
                         break;
                 }
@@ -68,9 +66,9 @@ public class OtherPresenter extends BasePresenter implements View.OnClickListene
         Button wrapBTN = (Button) view.findViewById(R.id.btn_wrap);
         wrapBTN.setOnClickListener(this);
 
-        data1ET = (EditText) view.findViewById(R.id.et_data1);
+        dataAET = (EditText) view.findViewById(R.id.et_data_a);
 
-        data2ET = (EditText) view.findViewById(R.id.et_data2);
+        dataBET = (EditText) view.findViewById(R.id.et_data_b);
 
     }
 
@@ -88,10 +86,17 @@ public class OtherPresenter extends BasePresenter implements View.OnClickListene
                 //读取点击事件
                 Bus.op = 6;
                 Bus.cmd = 0xE3;
+                break;
             case R.id.btn_set:
                 //设置点击事件
+                Bus.val1 = Integer.parseInt(dataBET.getText().toString());
+                Bus.val2 = Integer.parseInt(dataAET.getText().toString());
+                Bus.cmd = 0xE7;
+                break;
             case R.id.btn_wrap:
                 //打包卡位点击事件
+                Bus.op = 8;
+                Bus.cmd = 0xE1;
                 break;
         }
     }

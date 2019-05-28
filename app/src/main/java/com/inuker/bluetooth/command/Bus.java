@@ -47,6 +47,7 @@ public class Bus {
     private static ScheduledFuture cmdReceiveFuture;
 
     private static Bus bus = new Bus();
+    private static MyHandler myHandler = MyHandler.get();
 
     boolean sumCheck(byte[] dataIn, int lenIn) {
         int sum = 0;
@@ -111,31 +112,38 @@ public class Bus {
                 code = execute.qTempExecute(f1);
                 break;
             case 0xE1:   // 复位
-                code = execute.qReset(1);
+                code = execute.qReset(op);
                 break;
             case 0xE2:   // 运动
                 code = execute.qMove(op, val1);
                 break;
             case 0xE3:   // 获取参数
-                Param param = new Param();
-                param.val1 = 0;
-                param.val2 = 0;
-                code = execute.qGetParam(op, param);
-                Log.i(TAG, " pa= " + param);
+                Param param1 = new Param();
+                param1.val1 = 0;
+                Param param2 = new Param();
+                param2.val1 = 0;
+
+                code = execute.qGetParam(op, param1);
+                Log.i(TAG, " pa= " + param1.val1);
 
                 if (code == 0) {
                     if (op == 6) {
-//                        code = execute.qGetParam(7, param);
+                        code = execute.qGetParam(7, param2);
+                        Log.i(TAG, " pa1= " + param2.val1);
                     }
                 }
-                Log.i(TAG, " pa1= " + param.val1 + ",pa2=" + param.val2);
                 Message message = new Message();
                 message.what = MyHandler.MSG_WHAT_OTHER;
-                message.obj = param;
-                MyHandler.get().handler().sendMessage(message);
+                message.obj = new Param(param1.val1, param2.val1);
+                myHandler.handler().sendMessage(message);
                 break;
             case 0xE7:   // 设置参数
                 code = execute.qSetParam(op, val1);
+                if (code == 0) {
+                    if (op == 6) {
+                        code = execute.qSetParam(7, val2);
+                    }
+                }
                 break;
         }
 

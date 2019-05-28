@@ -27,7 +27,7 @@ public class TempPresenter extends BasePresenter implements View.OnClickListener
     private TextView modTV;
     private TextView envTV;
 
-    private static MyHandler handler = MyHandler.get();
+    private MyHandler handler = MyHandler.get();
 
     public TempPresenter(Activity activity) {
         this.activity = activity;
