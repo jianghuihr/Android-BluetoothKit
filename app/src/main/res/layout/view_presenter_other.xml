@@ -26,11 +26,12 @@
 
             <TextView
                 android:id="@+id/tv_version"
-                android:layout_width="60dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@drawable/shape_temp_text_bg"
                 android:gravity="center_vertical"
                 android:paddingStart="10dp"
+                android:ems="5"
                 android:paddingEnd="10dp"
                 android:text="1.0" />
         </LinearLayout>
@@ -51,17 +52,18 @@
 
             <TextView
                 android:id="@+id/tv_code"
-                android:layout_width="60dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@drawable/shape_temp_text_bg"
                 android:gravity="center_vertical"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
+                android:ems="5"
                 android:text="1.0" />
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_execute"
+            android:id="@+id/btn_request_version"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/style_button_bg"
@@ -120,7 +122,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="8dp"
-                    android:text="A"
+                    android:text="X"
                     android:textSize="20sp" />
 
                 <EditText
@@ -145,7 +147,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="8dp"
-                    android:text="B"
+                    android:text="Y"
                     android:textSize="20sp" />
 
                 <EditText

@@ -3,11 +3,11 @@ package com.inuker.bluetooth.presenter;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.inuker.bluetooth.R;
@@ -22,6 +22,9 @@ public class OtherPresenter extends BasePresenter implements View.OnClickListene
 
     private EditText dataAET;
     private EditText dataBET;
+    private TextView versionTV;
+    private TextView codeTV;
+    private TextView buildDateTV;
 
     public OtherPresenter(Activity activity) {
         this.activity = activity;
@@ -34,15 +37,24 @@ public class OtherPresenter extends BasePresenter implements View.OnClickListene
         View view = LayoutInflater.from(activity).inflate(R.layout.view_presenter_other, null);
         initView(view);
 
-        handler.setSendCallback(new Handler.Callback() {
+        handler.addSendCallback(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
+                Param param = null;
                 switch (msg.what) {
                     case MyHandler.MSG_WHAT_OTHER_E3:
-                        Param param = (Param) msg.obj;
+                        param = (Param) msg.obj;
                         if (null != param) {
                             dataAET.setText(String.valueOf(param.val2));
                             dataBET.setText(String.valueOf(param.val1));
+                        }
+                        break;
+                    case MyHandler.MSG_WHAT_OTHER_EF:
+                        param = (Param) msg.obj;
+                        if (null != param) {
+                            versionTV.setText("V" + param.val1);
+                            codeTV.setText("M" + param.val2);
+                            buildDateTV.setText(param.s1);
                         }
                         break;
                 }
@@ -67,10 +79,15 @@ public class OtherPresenter extends BasePresenter implements View.OnClickListene
         Button wrapBTN = (Button) view.findViewById(R.id.btn_wrap);
         wrapBTN.setOnClickListener(this);
 
+        Button requestVersionBTN = (Button) view.findViewById(R.id.btn_request_version);
+        requestVersionBTN.setOnClickListener(this);
+
+        versionTV = (TextView) view.findViewById(R.id.tv_version);
+        codeTV = (TextView) view.findViewById(R.id.tv_code);
+        buildDateTV = (TextView) view.findViewById(R.id.tv_build_date);
+
         dataAET = (EditText) view.findViewById(R.id.et_data_a);
-
         dataBET = (EditText) view.findViewById(R.id.et_data_b);
-
     }
 
     @Override
@@ -98,6 +115,10 @@ public class OtherPresenter extends BasePresenter implements View.OnClickListene
                 //打包卡位点击事件
                 Bus.op = 8;
                 Bus.cmd = 0xE1;
+                break;
+            case R.id.btn_request_version:
+                Bus.op = 0xFE;
+                Bus.cmd = 0xEF;
                 break;
         }
     }
