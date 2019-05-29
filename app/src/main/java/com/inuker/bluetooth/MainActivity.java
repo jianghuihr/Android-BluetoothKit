@@ -39,7 +39,6 @@ public class MainActivity extends Activity {
     private static final String PREFIX_NAME = "HH-M";
     private static final String PREFIX_SERVICE = "0000ffe0";
     private static final String PREFIX_CHARACTER = "0000ffe1";
-
     private PullToRefreshFrameLayout mRefreshLayout;
     private PullRefreshListView mListView;
     private DeviceListAdapter mAdapter;
