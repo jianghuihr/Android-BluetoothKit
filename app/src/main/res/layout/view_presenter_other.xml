@@ -122,7 +122,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="8dp"
-                    android:text="A"
+                    android:text="X"
                     android:textSize="20sp" />
 
                 <EditText
@@ -147,7 +147,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="8dp"
-                    android:text="B"
+                    android:text="Y"
                     android:textSize="20sp" />
 
                 <EditText
