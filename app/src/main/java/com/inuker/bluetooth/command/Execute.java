@@ -99,6 +99,29 @@ public class Execute {
         return code;
     }
 
+    int qExecFluo(int ch) {
+        int code = 0;
+        byte[] dataOut = new byte[4];
+        dataOut[0] = (byte)0xA9;
+        dataOut[1] = 2;
+        dataOut[2] = (byte)ch;
+        dataOut[3] = (byte)sumMake(dataOut, dataOut.length);
+        write(dataOut);
+        int ret = Semaphore.pend(15000);
+        if (ret == 0) {
+            Log.i(TAG, "ok");
+        } else {
+            Log.i(TAG, "timeout");
+        }
+        code = CmdReturn.GetCode();
+
+        CmdReturn.lenRx = 0;
+
+        Log.i(TAG, "exGetFluo code= " + code);
+
+        return code;
+    }
+
     // 复位
     int qReset(int op) {
         int code = 0;
@@ -171,6 +194,32 @@ public class Execute {
         return code;
     }
 
+    // 读取传感器信息
+    int qCheckSensor(int devId, Param param) {
+        int code = 0;
+        byte[] dataOut = new byte[4];
+        dataOut[0] = (byte)0xE5;
+        dataOut[1] = 2;
+        dataOut[2] = (byte)devId;
+        dataOut[3] = (byte)sumMake(dataOut, dataOut.length);
+        write(dataOut);
+        int ret = Semaphore.pend(500);
+        if (ret == 0) {
+            Log.i(TAG, "ok");
+        } else {
+            Log.i(TAG, "timeout");
+        }
+        code = CmdReturn.GetCode();
+        param.val1 = Byte2UINT(CmdReturn.rx[3]);
+        Log.i(TAG, "param1=" + param.val1);
+
+        CmdReturn.lenRx = 0;
+
+        Log.i(TAG, "getSensor code= " + code);
+
+        return code;
+    }
+
     // 运动
     int qSetParam(int op, int param) {
         int code = 0;
@@ -196,13 +245,12 @@ public class Execute {
         return code;
     }
 
-    // 读取传感器信息
-    int qCheckSensor(int devId, Param param) {
+    int qDebug(int op, Param param) {      // Param 增加  string s1, s2
         int code = 0;
         byte[] dataOut = new byte[4];
-        dataOut[0] = (byte)0xE5;
+        dataOut[0] = (byte)0xEF;
         dataOut[1] = 2;
-        dataOut[2] = (byte)devId;
+        dataOut[2] = (byte)op;
         dataOut[3] = (byte)sumMake(dataOut, dataOut.length);
         write(dataOut);
         int ret = Semaphore.pend(500);
@@ -212,12 +260,22 @@ public class Execute {
             Log.i(TAG, "timeout");
         }
         code = CmdReturn.GetCode();
-        param.val1 = Byte2UINT(CmdReturn.rx[3]);
+        if (op == 0xFE) {  // 读取版本等
+            byte[] b = new byte[11];
+            for (int j = 0; j < 11; j++) {
+                b[j] = CmdReturn.rx[3 + j];
+            }
+            param.s1 = new String(b);
+            param.val1 = Byte2UINT(CmdReturn.rx[14]) + Byte2UINT(CmdReturn.rx[15]) * 256;  // version
+            param.val2 = Byte2UINT(CmdReturn.rx[16]) + Byte2UINT(CmdReturn.rx[17]) * 256;	 // numx
+        }
+
         Log.i(TAG, "param1=" + param.val1);
+
 
         CmdReturn.lenRx = 0;
 
-        Log.i(TAG, "getSensor code= " + code);
+        Log.i(TAG, "qDebug code= " + code);
 
         return code;
     }

@@ -106,6 +106,9 @@ public class Bus {
             case 0xA8:   // 执行温度点
                 code = execute.qTempExecute(f1);
                 break;
+            case 0xA9:   // 采光一次
+                code = execute.qExecFluo(val1);
+                break;
             case 0xE1:   // 复位
                 code = execute.qReset(op);
                 break;
@@ -149,6 +152,20 @@ public class Bus {
                     if (op == 6) {
                         code = execute.qSetParam(7, val2);
                     }
+                }
+                break;
+            case 0xEF:   //
+                Param paramEF = new Param();
+                code = execute.qDebug(op, paramEF);
+
+                if (op == 0xFE) {
+                    // 显示： 版本："V" + obj.val1.ToString();
+                    // 显示： 编号："M" + obj.val2.ToString();
+                    // 显示： 编译时间：obj.s1    // 文本框长度可能不够，格式：Mar 20 2019
+                    Message msgEF = new Message();
+                    msgEF.what = MyHandler.MSG_WHAT_OTHER_EF;
+                    msgEF.obj = paramEF;
+                    myHandler.sendHandler().sendMessage(msgEF);
                 }
                 break;
         }

@@ -138,6 +138,9 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
 
         Button readBTN = (Button) view.findViewById(R.id.btn_read);
         readBTN.setOnClickListener(this);
+
+        Button lightOnceBTN = (Button) view.findViewById(R.id.btn_light_once);
+        lightOnceBTN.setOnClickListener(this);
     }
 
     @Override
@@ -207,6 +210,10 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
                     Bus.val1 = 0x42;
                 }
                 Bus.cmd = 0xE5;
+                break;
+            case R.id.btn_light_once:
+                Bus.val1 = 0;
+                Bus.cmd = 0xA9;
                 break;
         }
     }
