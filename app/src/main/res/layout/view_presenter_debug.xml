@@ -199,170 +199,57 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:paddingTop="8dp"-->
-            <!--android:paddingBottom="8dp"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:background="@drawable/shape_temp_text_bg"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<RadioGroup-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:layout_gravity="center_vertical"-->
-                <!--android:layout_marginEnd="16dp"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:orientation="horizontal">-->
-
-                <!--<RadioButton-->
-                    <!--android:id="@+id/rb_x_zero"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginEnd="16dp"-->
-                    <!--android:text="X 零位" />-->
-
-                <!--<RadioButton-->
-                    <!--android:id="@+id/rb_y_zero"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Y 零位" />-->
-            <!--</RadioGroup>-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/tv_result"-->
-                <!--android:layout_width="40dp"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:layout_marginEnd="16dp"-->
-                <!--android:gravity="center"-->
-                <!--android:textColor="@android:color/black"-->
-                <!--android:textSize="16sp" />-->
-
-            <!--<Button-->
-                <!--android:id="@+id/btn_read"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:background="@drawable/style_button_bg"-->
-                <!--android:gravity="center"-->
-                <!--android:text="读取"-->
-                <!--android:textColor="@android:color/black"-->
-                <!--android:textSize="16sp" />-->
-        <!--</LinearLayout>-->
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/shape_debug_rect_bg"
-            android:padding="8dp">
+            android:background="@drawable/shape_temp_text_bg"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/layout_start"
+            <RadioGroup
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:orientation="vertical">
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <LinearLayout
+                <RadioButton
+                    android:id="@+id/rb_x_zero"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp">
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="X 零位" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="8dp"
-                        android:text="A"
-                        android:textSize="20sp" />
-
-                    <EditText
-                        android:id="@+id/et_data_a"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:background="@drawable/shape_temp_text_bg"
-                        android:ems="5"
-                        android:inputType="number"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp"
-                        android:text="1000" />
-                </LinearLayout>
-
-                <LinearLayout
+                <RadioButton
+                    android:id="@+id/rb_y_zero"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="8dp">
+                    android:layout_height="wrap_content"
+                    android:text="Y 零位" />
+            </RadioGroup>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="8dp"
-                        android:text="B"
-                        android:textSize="20sp" />
+            <TextView
+                android:id="@+id/tv_result"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:text="#"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
 
-                    <EditText
-                        android:id="@+id/et_data_b"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-
-                        android:background="@drawable/shape_temp_text_bg"
-                        android:ems="5"
-                        android:inputType="number"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp"
-                        android:text="1000" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
+            <Button
+                android:id="@+id/btn_read"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="16dp"
-                android:layout_toEndOf="@id/layout_start"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp">
-
-                    <Button
-                        android:id="@+id/btn_read"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/style_button_bg"
-                        android:gravity="center"
-                        android:text="读取"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp" />
-
-                    <Button
-                        android:id="@+id/btn_set"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="8dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/style_button_bg"
-                        android:gravity="center"
-                        android:text="设置"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp" />
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/btn_wrap"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/style_button_bg"
-                    android:gravity="center"
-                    android:text="打包卡位"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-        </RelativeLayout>
+                android:layout_height="30dp"
+                android:background="@drawable/style_button_bg"
+                android:gravity="center"
+                android:text="读取"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

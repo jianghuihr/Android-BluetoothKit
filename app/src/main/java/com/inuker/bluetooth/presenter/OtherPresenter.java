@@ -3,7 +3,6 @@ package com.inuker.bluetooth.presenter;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -34,7 +33,7 @@ public class OtherPresenter extends BasePresenter implements View.OnClickListene
         View view = LayoutInflater.from(activity).inflate(R.layout.view_presenter_other, null);
         initView(view);
 
-        handler.setSendCallback(new Handler.Callback() {
+        handler.addSendCallback(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {

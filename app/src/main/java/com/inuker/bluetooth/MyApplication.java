@@ -22,6 +22,7 @@ public class MyApplication extends Application {
         super.onCreate();
         instance = this;
         BluetoothContext.set(this);
+
         Bus.cmdProcRoll();
         Bus.cmdReceiveRoll();
     }

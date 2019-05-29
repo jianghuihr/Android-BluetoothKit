@@ -1,6 +1,5 @@
 package com.inuker.bluetooth.command;
 
-import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -9,10 +8,8 @@ import com.inuker.bluetooth.concurrency.MyHandler;
 import com.inuker.bluetooth.concurrency.ScheduleThreadPoolManager;
 import com.inuker.bluetooth.library.utils.ByteUtils;
 import com.inuker.bluetooth.model.Param;
-import com.inuker.bluetooth.model.Temp;
 
 import java.util.Arrays;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 // 功能: 通信线程处理, 通信内核
@@ -43,8 +40,6 @@ public class Bus {
     private static final int RX_BYTES_MAX = 127;
 
     private static Execute execute = null;
-    private static ScheduledFuture cmdSendFuture;
-    private static ScheduledFuture cmdReceiveFuture;
 
     private static Bus bus = new Bus();
     private static MyHandler myHandler = MyHandler.get();
@@ -124,12 +119,12 @@ public class Bus {
                 param2.val1 = 0;
 
                 code = execute.qGetParam(op, param1);
-                Log.i(TAG, " pa= " + param1.val1);
+                Log.i(TAG, " 0xE3 pa= " + param1.val1);
 
                 if (code == 0) {
                     if (op == 6) {
                         code = execute.qGetParam(7, param2);
-                        Log.i(TAG, " pa1= " + param2.val1);
+                        Log.i(TAG, " 0xE3 pa1= " + param2.val1);
                     }
                 }
                 Message message = new Message();
@@ -141,7 +136,7 @@ public class Bus {
                 Param param = new Param();
                 param.val1 = 0;
                 code = execute.qCheckSensor(val1, param);
-                Log.i(TAG, " pa1= " + param.val1);    // 0： 不触发；1-触发
+                Log.i(TAG, " 0xE5 pa1= " + param.val1);    // 0： 不触发；1-触发
 
                 Message msgE5 = new Message();
                 msgE5.what = MyHandler.MSG_WHAT_OTHER_E5;
@@ -162,11 +157,11 @@ public class Bus {
     }
 
     // 接收线程执行
-    private static Runnable cmdReceiveRollTask = new Runnable() {
+    private static Runnable cmdReceiveTask = new Runnable() {
         @Override
         public void run() {
             rxProc();
-            ScheduleThreadPoolManager.getInstance().schedule(cmdReceiveRollTask, 10, TimeUnit.MILLISECONDS);
+            ScheduleThreadPoolManager.getInstance().schedule(cmdReceiveTask, 10, TimeUnit.MILLISECONDS);
         }
     };
 
@@ -195,11 +190,11 @@ public class Bus {
 
     // 接收线程
     public static void cmdReceiveRoll() {
-        cmdReceiveFuture = ScheduleThreadPoolManager.getInstance().schedule(cmdReceiveRollTask, 0, TimeUnit.MILLISECONDS);
+        ScheduleThreadPoolManager.getInstance().schedule(cmdReceiveTask, 0, TimeUnit.MILLISECONDS);
     }
 
     // 指令发送线程
     public static void cmdProcRoll() {
-        cmdSendFuture = ScheduleThreadPoolManager.getInstance().schedule(cmdSendTask, 0, TimeUnit.MILLISECONDS);
+        ScheduleThreadPoolManager.getInstance().schedule(cmdSendTask, 0, TimeUnit.MILLISECONDS);
     }
 }

@@ -43,22 +43,14 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
         View view = LayoutInflater.from(activity).inflate(R.layout.view_presenter_debug, null);
         initView(view);
 
-        handler.setSendCallback(new Handler.Callback() {
+        handler.addSendCallback(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
-                    case MyHandler.MSG_WHAT_OTHER_E3:
-                        Param param = (Param) msg.obj;
-                        if (null != param) {
-                            dataAET.setText(String.valueOf(param.val2));
-                            dataBET.setText(String.valueOf(param.val1));
-                        }
-                        break;
                     case MyHandler.MSG_WHAT_OTHER_E5:
                         Param paramE5 = (Param) msg.obj;
                         if (null != paramE5) {
-                            dataAET.setText("#" + String.valueOf(paramE5.val1));
-                            dataBET.setText("#");
+                            resultTV.setText(String.valueOf(paramE5.val1));
                         }
                         break;
                 }
@@ -137,12 +129,12 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
             }
         });
 
-//        xZeroRB = (RadioButton) view.findViewById(R.id.rb_x_zero);
-//        xZeroRB.setChecked(true);
-//
-//        yZeroRB = (RadioButton) view.findViewById(R.id.rb_y_zero);
-//
-//        resultTV = (TextView) view.findViewById(R.id.tv_result);
+        xZeroRB = (RadioButton) view.findViewById(R.id.rb_x_zero);
+        xZeroRB.setChecked(true);
+
+        yZeroRB = (RadioButton) view.findViewById(R.id.rb_y_zero);
+
+        resultTV = (TextView) view.findViewById(R.id.tv_result);
 
         Button readBTN = (Button) view.findViewById(R.id.btn_read);
         readBTN.setOnClickListener(this);
@@ -209,11 +201,11 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
                 Bus.cmd = 0xE7;
                 break;
             case R.id.btn_read:
-//                if (xZeroRB.isChecked()) {
+                if (xZeroRB.isChecked()) {
                     Bus.val1 = 0x40;
-//                } else if (yZeroRB.isChecked()) {
-//                    Bus.val1 = 0x42;
-//                }
+                } else if (yZeroRB.isChecked()) {
+                    Bus.val1 = 0x42;
+                }
                 Bus.cmd = 0xE5;
                 break;
         }
