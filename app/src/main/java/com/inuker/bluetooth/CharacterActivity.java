@@ -103,7 +103,7 @@ public class CharacterActivity extends Activity {
         bleToolPageList.add(new PageView(debugPresenter.getView(), debugPresenter.getTitle()));
         bleToolPageList.add(new PageView(otherPresenter.getView(), otherPresenter.getTitle()));
         bleToolPagerAdapter.refresh(bleToolPageList);
-        mBlePager.setCurrentItem(0);
+        mBlePager.setCurrentItem(1);
 
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(mBlePager);

@@ -109,6 +109,7 @@ public class OtherPresenter extends BasePresenter implements View.OnClickListene
                 //设置点击事件
                 Bus.val1 = Integer.parseInt(dataBET.getText().toString());
                 Bus.val2 = Integer.parseInt(dataAET.getText().toString());
+                Bus.op = 6;
                 Bus.cmd = 0xE7;
                 break;
             case R.id.btn_wrap:

@@ -146,6 +146,10 @@ public class Bus {
                 msgE5.obj = param;
                 myHandler.sendHandler().sendMessage(msgE5);
                 break;
+            case 0xE6:   // 部件切换
+                code = execute.qSwitch(val1, op, 0);
+                Log.i(TAG, " val=" + val1 + "  op=" + op);
+                break;
             case 0xE7:   // 设置参数
                 code = execute.qSetParam(op, val1);
                 if (code == 0) {

@@ -42,8 +42,19 @@
             android:text="制冷片加热" />
 
         <RadioButton
+            android:id="@+id/rb_6"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:text="制冷片制冷" />
+        <RadioButton
+            android:id="@+id/rb_7"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="辅助加热 近" />
+        <RadioButton
+            android:id="@+id/rb_8"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="辅助加热 远" />
     </RadioGroup>
 </android.support.v4.widget.NestedScrollView>

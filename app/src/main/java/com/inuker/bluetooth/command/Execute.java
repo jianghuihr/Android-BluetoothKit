@@ -102,10 +102,10 @@ public class Execute {
     int qExecFluo(int ch) {
         int code = 0;
         byte[] dataOut = new byte[4];
-        dataOut[0] = (byte)0xA9;
+        dataOut[0] = (byte) 0xA9;
         dataOut[1] = 2;
-        dataOut[2] = (byte)ch;
-        dataOut[3] = (byte)sumMake(dataOut, dataOut.length);
+        dataOut[2] = (byte) ch;
+        dataOut[3] = (byte) sumMake(dataOut, dataOut.length);
         write(dataOut);
         int ret = Semaphore.pend(15000);
         if (ret == 0) {
@@ -198,10 +198,10 @@ public class Execute {
     int qCheckSensor(int devId, Param param) {
         int code = 0;
         byte[] dataOut = new byte[4];
-        dataOut[0] = (byte)0xE5;
+        dataOut[0] = (byte) 0xE5;
         dataOut[1] = 2;
-        dataOut[2] = (byte)devId;
-        dataOut[3] = (byte)sumMake(dataOut, dataOut.length);
+        dataOut[2] = (byte) devId;
+        dataOut[3] = (byte) sumMake(dataOut, dataOut.length);
         write(dataOut);
         int ret = Semaphore.pend(500);
         if (ret == 0) {
@@ -248,10 +248,10 @@ public class Execute {
     int qDebug(int op, Param param) {      // Param 增加  string s1, s2
         int code = 0;
         byte[] dataOut = new byte[4];
-        dataOut[0] = (byte)0xEF;
+        dataOut[0] = (byte) 0xEF;
         dataOut[1] = 2;
-        dataOut[2] = (byte)op;
-        dataOut[3] = (byte)sumMake(dataOut, dataOut.length);
+        dataOut[2] = (byte) op;
+        dataOut[3] = (byte) sumMake(dataOut, dataOut.length);
         write(dataOut);
         int ret = Semaphore.pend(500);
         if (ret == 0) {
@@ -267,7 +267,7 @@ public class Execute {
             }
             param.s1 = new String(b);
             param.val1 = Byte2UINT(CmdReturn.rx[14]) + Byte2UINT(CmdReturn.rx[15]) * 256;  // version
-            param.val2 = Byte2UINT(CmdReturn.rx[16]) + Byte2UINT(CmdReturn.rx[17]) * 256;	 // numx
+            param.val2 = Byte2UINT(CmdReturn.rx[16]) + Byte2UINT(CmdReturn.rx[17]) * 256;     // numx
         }
 
         Log.i(TAG, "param1=" + param.val1);
@@ -276,6 +276,32 @@ public class Execute {
         CmdReturn.lenRx = 0;
 
         Log.i(TAG, "qDebug code= " + code);
+
+        return code;
+    }
+
+    int qSwitch(int devId, int op, int time) {
+        int code = 0;
+        byte[] dataOut = new byte[7];
+        dataOut[0] = (byte) 0xE6;
+        dataOut[1] = 5;
+        dataOut[2] = (byte) devId;
+        dataOut[3] = (byte) op;
+        dataOut[4] = (byte) ((time >> 0) & 0xff);
+        dataOut[5] = (byte) ((time >> 8) & 0xff);
+        dataOut[6] = (byte) sumMake(dataOut, dataOut.length);
+        write(dataOut);
+        int ret = Semaphore.pend(500);
+        if (ret == 0) {
+            Log.i(TAG, "ok");
+        } else {
+            Log.i(TAG, "timeout");
+        }
+        code = CmdReturn.GetCode();
+
+        CmdReturn.lenRx = 0;
+
+        Log.i(TAG, "qSwitch code= " + code);
 
         return code;
     }

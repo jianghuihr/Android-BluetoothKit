@@ -29,8 +29,7 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
     private RadioButton xZeroRB;
     private RadioButton yZeroRB;
     private TextView resultTV;
-    private EditText dataAET;
-    private EditText dataBET;
+    private int chooseVal = -1;
 
     private MyHandler handler = MyHandler.get();
 
@@ -61,10 +60,6 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
     }
 
     private void initView(View view) {
-        dataAET = (EditText) view.findViewById(R.id.et_data_a);
-
-        dataBET = (EditText) view.findViewById(R.id.et_data_b);
-
         distanceET = (EditText) view.findViewById(R.id.et_distance);
 
         TextView resetXYTV = (TextView) view.findViewById(R.id.tv_reset_xy);
@@ -108,26 +103,39 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
         Button tiredBTN = (Button) view.findViewById(R.id.btn_tired);
         tiredBTN.setOnClickListener(this);
 
-        RadioGroup chooseRG = (RadioGroup) view.findViewById(R.id.rg_choose);
-        chooseRG.check(R.id.rb_1);
+        final RadioGroup chooseRG = (RadioGroup) view.findViewById(R.id.rg_choose);
         chooseRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int id) {
                 switch (id) {
-                    case R.id.rb_1:
-                        Log.i(TITLE, "通道一光源");
+                    case R.id.rb_1://通道一光源
+                        chooseVal = 0x21;
                         break;
-                    case R.id.rb_2:
+                    case R.id.rb_2://运行指示灯
+                        chooseVal = 0x23;
                         break;
-                    case R.id.rb_3:
+                    case R.id.rb_3://故障指示灯
+                        chooseVal = 0x24;
                         break;
-                    case R.id.rb_4:
+                    case R.id.rb_4://顶盖加热
+                        chooseVal = 0x25;
                         break;
-                    case R.id.rb_5:
+                    case R.id.rb_5://制冷片加热
+                        chooseVal = 0x26;
+                        break;
+                    case R.id.rb_6://制冷片制冷
+                        chooseVal = 0x2B;
+                        break;
+                    case R.id.rb_7://辅助加热 近
+                        chooseVal = 0x29;
+                        break;
+                    case R.id.rb_8://辅助加热 远
+                        chooseVal = 0x2A;
                         break;
                 }
             }
         });
+        chooseRG.check(R.id.rb_1);
 
         xZeroRB = (RadioButton) view.findViewById(R.id.rb_x_zero);
         xZeroRB.setChecked(true);
@@ -141,6 +149,12 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
 
         Button lightOnceBTN = (Button) view.findViewById(R.id.btn_light_once);
         lightOnceBTN.setOnClickListener(this);
+
+        Button openBTN = (Button) view.findViewById(R.id.btn_open);
+        openBTN.setOnClickListener(this);
+
+        Button closeBTN = (Button) view.findViewById(R.id.btn_close);
+        closeBTN.setOnClickListener(this);
     }
 
     @Override
@@ -214,6 +228,20 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
             case R.id.btn_light_once:
                 Bus.val1 = 0;
                 Bus.cmd = 0xA9;
+                break;
+            case R.id.btn_open:
+                if (chooseVal != -1) {
+                    Bus.val1 = chooseVal;
+                    Bus.op = 1;
+                    Bus.cmd = 0xE6;
+                }
+                break;
+            case R.id.btn_close:
+                if(chooseVal != -1) {
+                    Bus.val1 = chooseVal;
+                    Bus.op = 0;
+                    Bus.cmd = 0xE6;
+                }
                 break;
         }
     }
