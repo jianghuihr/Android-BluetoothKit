@@ -29,7 +29,8 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
     private RadioButton xZeroRB;
     private RadioButton yZeroRB;
     private TextView resultTV;
-    private int chooseVal = -1;
+    private int chooseVal = 0x21;
+    private int op = 0;
 
     private MyHandler handler = MyHandler.get();
 
@@ -66,13 +67,13 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
         resetXYTV.setOnClickListener(this);
 
         RadioButton relativeRB = (RadioButton) view.findViewById(R.id.rb_relative);
-        relativeRB.setChecked(true);
         relativeRB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isCheck) {
                 if (isCheck) {
                     //相对点击
-                    Bus.op = 0;
+                    op = 0;
+                    Log.i(TAG, "relative check=" + isCheck + "  op=" + op);
                 }
             }
         });
@@ -83,10 +84,11 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
             public void onCheckedChanged(CompoundButton compoundButton, boolean isCheck) {
                 if (isCheck) {
                     //直接点击
-                    Bus.op = 1;
+                    op = 1;
                 }
             }
         });
+        relativeRB.setChecked(true);
 
         Button xToZeroBTN = (Button) view.findViewById(R.id.btn_x_to_zero);
         xToZeroBTN.setOnClickListener(this);
@@ -179,7 +181,7 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
             case R.id.btn_x_to_zero:
                 //X向零位点击事件
                 Bus.val1 = -Integer.parseInt(distanceET.getText().toString());
-                if (Bus.op == 0) // 相对
+                if (op == 0) // 相对
                     Bus.op = 0;  //
                 else
                     Bus.op = 2;
@@ -188,7 +190,7 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
             case R.id.btn_x_out_zero:
                 //X离零位点击事件
                 Bus.val1 = Integer.parseInt(distanceET.getText().toString());
-                if (Bus.op == 0) // 相对
+                if (op == 0) // 相对
                     Bus.op = 0;
                 else
                     Bus.op = 2;
@@ -197,7 +199,7 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
             case R.id.btn_y_to_zero:
                 //Y向零位点击事件
                 Bus.val1 = -Integer.parseInt(distanceET.getText().toString());
-                if (Bus.op == 0) // 相对
+                if (op == 0) // 相对
                     Bus.op = 3;
                 else
                     Bus.op = 5;
@@ -206,7 +208,7 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
             case R.id.btn_y_out_zero:
                 //Y离零位点击事件
                 Bus.val1 = Integer.parseInt(distanceET.getText().toString());
-                if (Bus.op == 0) // 相对
+                if (op == 0) // 相对
                     Bus.op = 3;
                 else
                     Bus.op = 5;
@@ -237,7 +239,7 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
                 }
                 break;
             case R.id.btn_close:
-                if(chooseVal != -1) {
+                if (chooseVal != -1) {
                     Bus.val1 = chooseVal;
                     Bus.op = 0;
                     Bus.cmd = 0xE6;

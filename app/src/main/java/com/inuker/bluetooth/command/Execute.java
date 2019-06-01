@@ -109,9 +109,9 @@ public class Execute {
         write(dataOut);
         int ret = Semaphore.pend(15000);
         if (ret == 0) {
-            Log.i(TAG, "ok");
+           // Log.i(TAG, "ok");
         } else {
-            Log.i(TAG, "timeout");
+           // Log.i(TAG, "timeout");
         }
         code = CmdReturn.GetCode();
 
@@ -157,9 +157,9 @@ public class Execute {
         write(dataOut);
         int ret = Semaphore.pend(15000);
         if (ret == 0) {
-            Log.i(TAG, "ok");
+          //  Log.i(TAG, "ok");
         } else {
-            Log.i(TAG, "timeout");
+           // Log.i(TAG, "timeout");
         }
         code = CmdReturn.GetCode();
         CmdReturn.lenRx = 0;
@@ -179,9 +179,9 @@ public class Execute {
         write(dataOut);
         int ret = Semaphore.pend(500);
         if (ret == 0) {
-            Log.i(TAG, "ok");
+          //  Log.i(TAG, "ok");
         } else {
-            Log.i(TAG, "timeout");
+          //  Log.i(TAG, "timeout");
         }
         code = CmdReturn.GetCode();
 
@@ -205,9 +205,9 @@ public class Execute {
         write(dataOut);
         int ret = Semaphore.pend(500);
         if (ret == 0) {
-            Log.i(TAG, "ok");
+           // Log.i(TAG, "ok");
         } else {
-            Log.i(TAG, "timeout");
+          //  Log.i(TAG, "timeout");
         }
         code = CmdReturn.GetCode();
         param.val1 = Byte2UINT(CmdReturn.rx[3]);
@@ -233,9 +233,9 @@ public class Execute {
         write(dataOut);
         int ret = Semaphore.pend(500);
         if (ret == 0) {
-            Log.i(TAG, "ok");
+          //  Log.i(TAG, "ok");
         } else {
-            Log.i(TAG, "timeout");
+           // Log.i(TAG, "timeout");
         }
         code = CmdReturn.GetCode();
         CmdReturn.lenRx = 0;
@@ -255,9 +255,9 @@ public class Execute {
         write(dataOut);
         int ret = Semaphore.pend(500);
         if (ret == 0) {
-            Log.i(TAG, "ok");
+           // Log.i(TAG, "ok");
         } else {
-            Log.i(TAG, "timeout");
+           // Log.i(TAG, "timeout");
         }
         code = CmdReturn.GetCode();
         if (op == 0xFE) {  // 读取版本等
@@ -293,9 +293,9 @@ public class Execute {
         write(dataOut);
         int ret = Semaphore.pend(500);
         if (ret == 0) {
-            Log.i(TAG, "ok");
+          //  Log.i(TAG, "ok");
         } else {
-            Log.i(TAG, "timeout");
+           // Log.i(TAG, "timeout");
         }
         code = CmdReturn.GetCode();
 
@@ -304,28 +304,6 @@ public class Execute {
         Log.i(TAG, "qSwitch code= " + code);
 
         return code;
-    }
-
-    // 部件切换
-    void qSwitch(int devId, int action) {
-        //byte[] dataOut = new byte[]{0xE1, 0x02, 0x00, 0xE3};
-
-
-        // write();
-        // pend();
-
-        return;
-    }
-
-    // 读取传感器信息
-    int qCheckSensor(int devId) {
-        //byte[] dataOut = new byte[]{0xE1, 0x02, 0x00, 0xE3};
-
-
-        // write();
-        // pend();
-
-        return 1;
     }
 
 

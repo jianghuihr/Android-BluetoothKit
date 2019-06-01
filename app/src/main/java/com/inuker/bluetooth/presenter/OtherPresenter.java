@@ -82,6 +82,9 @@ public class OtherPresenter extends BasePresenter implements View.OnClickListene
         Button requestVersionBTN = (Button) view.findViewById(R.id.btn_request_version);
         requestVersionBTN.setOnClickListener(this);
 
+        Button yOldBTN = (Button) view.findViewById(R.id.btn_y_old);
+        yOldBTN.setOnClickListener(this);
+
         versionTV = (TextView) view.findViewById(R.id.tv_version);
         codeTV = (TextView) view.findViewById(R.id.tv_code);
         buildDateTV = (TextView) view.findViewById(R.id.tv_build_date);
@@ -120,6 +123,10 @@ public class OtherPresenter extends BasePresenter implements View.OnClickListene
             case R.id.btn_request_version:
                 Bus.op = 0xFE;
                 Bus.cmd = 0xEF;
+                break;
+            case R.id.btn_y_old:
+                Bus.op=9;
+                Bus.cmd= 0xE7;
                 break;
         }
     }
