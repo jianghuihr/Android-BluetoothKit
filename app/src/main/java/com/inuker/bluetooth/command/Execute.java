@@ -99,6 +99,30 @@ public class Execute {
         return code;
     }
 
+    int qGetFluoSingle(int ch, Param obj) {
+        int code = 0;
+        byte[] dataOut = new byte[4];
+        dataOut[0] = (byte)0xE4;
+        dataOut[1] = 2;
+        dataOut[2] = (byte)ch;
+        dataOut[3] = (byte)sumMake(dataOut, dataOut.length);
+        write(dataOut);
+        int ret = Semaphore.pend(3000);
+        if (ret == 0) {
+            Log.i(TAG, "ok");
+        } else {
+            Log.i(TAG, "timeout");
+        }
+        code = CmdReturn.GetCode();
+
+        obj.val1 = Byte2UINT(CmdReturn.rx[3]) + Byte2UINT(CmdReturn.rx[4]) * 256 + Byte2UINT(CmdReturn.rx[5]) * 65536;
+        CmdReturn.lenRx = 0;
+
+        Log.i(TAG, "qGetFluoSingle code= " + code);
+
+        return code;
+    }
+
     int qExecFluo(int ch) {
         int code = 0;
         byte[] dataOut = new byte[4];

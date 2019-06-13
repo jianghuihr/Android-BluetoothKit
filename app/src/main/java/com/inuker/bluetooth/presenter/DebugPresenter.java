@@ -29,7 +29,10 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
     private RadioButton xZeroRB;
     private RadioButton yZeroRB;
     private TextView resultTV;
+    private TextView lightValueTV;
+
     private int chooseVal = 0x21;
+    private int chooseLightVal = 0;
     private int op = 0;
 
     private MyHandler handler = MyHandler.get();
@@ -47,10 +50,16 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
             @Override
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
-                    case MyHandler.MSG_WHAT_OTHER_E5:
+                    case MyHandler.MSG_WHAT_DEBUG_E5:
                         Param paramE5 = (Param) msg.obj;
                         if (null != paramE5) {
                             resultTV.setText(String.valueOf(paramE5.val1));
+                        }
+                        break;
+                    case MyHandler.MSG_WHAT_DEBUG_SHOW_LIGHT:
+                        Param paramLight = (Param) msg.obj;
+                        if (null != paramLight) {
+                            lightValueTV.setText(String.valueOf(paramLight.val1));
                         }
                         break;
                 }
@@ -105,7 +114,7 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
         Button tiredBTN = (Button) view.findViewById(R.id.btn_tired);
         tiredBTN.setOnClickListener(this);
 
-        final RadioGroup chooseRG = (RadioGroup) view.findViewById(R.id.rg_choose);
+        RadioGroup chooseRG = (RadioGroup) view.findViewById(R.id.rg_choose);
         chooseRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int id) {
@@ -157,6 +166,27 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
 
         Button closeBTN = (Button) view.findViewById(R.id.btn_close);
         closeBTN.setOnClickListener(this);
+
+        RadioGroup chooseLightChannelRG = (RadioGroup) view.findViewById(R.id.rg_light_channel);
+        chooseRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int id) {
+                switch (id) {
+                    case R.id.rb_light_channel_1://通道一
+                        chooseLightVal = 0;
+                        break;
+                    case R.id.rb_light_channel_2://通道二
+                        chooseLightVal = 1;
+                        break;
+                }
+            }
+        });
+        chooseLightChannelRG.check(R.id.rb_light_channel_1);
+
+        Button lightBTN = (Button) view.findViewById(R.id.btn_light);
+        lightBTN.setOnClickListener(this);
+
+        lightValueTV = (TextView) view.findViewById(R.id.tv_light_value);
     }
 
     @Override
@@ -232,18 +262,18 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
                 Bus.cmd = 0xA9;
                 break;
             case R.id.btn_open:
-                if (chooseVal != -1) {
-                    Bus.val1 = chooseVal;
-                    Bus.op = 1;
-                    Bus.cmd = 0xE6;
-                }
+                Bus.val1 = chooseVal;
+                Bus.op = 1;
+                Bus.cmd = 0xE6;
                 break;
             case R.id.btn_close:
-                if (chooseVal != -1) {
-                    Bus.val1 = chooseVal;
-                    Bus.op = 0;
-                    Bus.cmd = 0xE6;
-                }
+                Bus.val1 = chooseVal;
+                Bus.op = 0;
+                Bus.cmd = 0xE6;
+                break;
+            case R.id.btn_light:
+                Bus.val1 = chooseLightVal;
+                Bus.cmd = 0xE4;
                 break;
         }
     }
