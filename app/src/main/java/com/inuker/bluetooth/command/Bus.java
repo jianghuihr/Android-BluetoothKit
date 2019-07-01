@@ -1,5 +1,6 @@
 package com.inuker.bluetooth.command;
 
+import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -135,6 +136,14 @@ public class Bus {
                 message.obj = new Param(param1.val1, param2.val1);
                 myHandler.sendHandler().sendMessage(message);
                 break;
+            case 0xE4:   //
+                Param obj = new Param();
+                code = execute.qGetFluoSingle(val1, obj);
+
+                // 把荧光值显示出来  obj.val1
+                Handler handler = myHandler.sendHandler();
+                handler.sendMessage(Message.obtain(handler, MyHandler.MSG_WHAT_DEBUG_SHOW_LIGHT, obj));
+                break;
             case 0xE5:   // 获取传感器状态
                 Param param = new Param();
                 param.val1 = 0;
@@ -142,7 +151,7 @@ public class Bus {
                 Log.i(TAG, " 0xE5 pa1= " + param.val1);    // 0： 不触发；1-触发
 
                 Message msgE5 = new Message();
-                msgE5.what = MyHandler.MSG_WHAT_OTHER_E5;
+                msgE5.what = MyHandler.MSG_WHAT_DEBUG_E5;
                 msgE5.obj = param;
                 myHandler.sendHandler().sendMessage(msgE5);
                 break;

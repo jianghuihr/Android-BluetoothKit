@@ -56,5 +56,11 @@
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:text="辅助加热 远" />
+
+        <RadioButton
+            android:id="@+id/rb_9"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="同步信号" />
     </RadioGroup>
 </android.support.v4.widget.NestedScrollView>

@@ -15,8 +15,9 @@ public class MyHandler {
     private final String TAG = MyHandler.class.getSimpleName();
     public static final int MSG_WHAT_TEMP = 1;
     public static final int MSG_WHAT_OTHER_E3 = 2;
-    public static final int MSG_WHAT_OTHER_E5 = 3;
+    public static final int MSG_WHAT_DEBUG_E5 = 3;
     public static final int MSG_WHAT_OTHER_EF = 4;
+    public static final int MSG_WHAT_DEBUG_SHOW_LIGHT = 5;
 
     private Handler sendHandler = new Handler(Looper.getMainLooper()) {
         @Override
