@@ -142,7 +142,7 @@ public class Bus {
 
                 // 把荧光值显示出来  obj.val1
                 Handler handler = myHandler.sendHandler();
-                handler.sendMessage(Message.obtain(handler, MyHandler.MSG_WHAT_DEBUG_SHOW_LIGHT, obj.val1));
+                handler.sendMessage(Message.obtain(handler, MyHandler.MSG_WHAT_DEBUG_SHOW_LIGHT, obj));
                 break;
             case 0xE5:   // 获取传感器状态
                 Param param = new Param();

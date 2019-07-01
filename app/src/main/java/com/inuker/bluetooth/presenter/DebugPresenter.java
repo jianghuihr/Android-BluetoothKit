@@ -143,6 +143,9 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
                     case R.id.rb_8://辅助加热 远
                         chooseVal = 0x2A;
                         break;
+                    case R.id.rb_9://同步信号
+                        chooseVal = 0x2D;
+                        break;
                 }
             }
         });
