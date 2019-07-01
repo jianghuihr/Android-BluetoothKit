@@ -58,7 +58,7 @@ android {
                 }
                 variant.getPackageApplication().outputScope.apkDatas.forEach { apkData ->
                     //这个修改输出APK的文件名
-                    apkData.outputFileName = "BluetoothKit_v" + getBuildTime() + ".apk"
+                    apkData.outputFileName = "BluetoothKit_v" + project.VERSION_NAME + "_" + getBuildTime() + ".apk"
                 }
             }
         }
