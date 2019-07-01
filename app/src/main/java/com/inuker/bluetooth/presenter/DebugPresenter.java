@@ -171,7 +171,7 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
         closeBTN.setOnClickListener(this);
 
         RadioGroup chooseLightChannelRG = (RadioGroup) view.findViewById(R.id.rg_light_channel);
-        chooseRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        chooseLightChannelRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int id) {
                 switch (id) {
@@ -268,11 +268,13 @@ public class DebugPresenter extends BasePresenter implements View.OnClickListene
                 Bus.val1 = chooseVal;
                 Bus.op = 1;
                 Bus.cmd = 0xE6;
+                Log.i(TAG , "open  val1="+ chooseVal);
                 break;
             case R.id.btn_close:
                 Bus.val1 = chooseVal;
                 Bus.op = 0;
                 Bus.cmd = 0xE6;
+                Log.i(TAG , "close  val1="+ chooseVal);
                 break;
             case R.id.btn_light:
                 Bus.val1 = chooseLightVal;
